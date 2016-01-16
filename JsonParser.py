@@ -1,4 +1,4 @@
-from Plugins import *
+from Sparsec import *
 
 
 def load(s):
@@ -63,19 +63,19 @@ def String(state):
 
 @Parsec
 def Null(state):
-    re = Eq("null")(state)
+    Eq("null")(state)
     return None
 
 
 @Parsec
 def True(state):
-    re = Eq("true")(state)
+    Eq("true")(state)
     return True
 
 
 @Parsec
 def False(state):
-    re = Eq("false")(state)
+    Eq("false")(state)
     return False
 
 
