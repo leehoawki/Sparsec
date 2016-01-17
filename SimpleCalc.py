@@ -1,4 +1,12 @@
 from Sparsec import *
+from operator import add, sub, mul, div
+
+ops = {
+    "+": add,
+    "-": sub,
+    "*": mul,
+    "/": div
+}
 
 
 def calculate(expression):
@@ -20,10 +28,7 @@ def Expr(state):
         return (op, t)
 
     for op, t in Many(terms)(state):
-        if op == "+":
-            re += t
-        elif op == "-":
-            re -= t
+        re = ops[op](re, t)
     return re
 
 
@@ -41,10 +46,7 @@ def Term(state):
         return (op, f)
 
     for op, f in Many(factors)(state):
-        if op == "*":
-            re *= f
-        elif op == "/":
-            re /= f
+        re = ops[op](re, f)
     return re
 
 
