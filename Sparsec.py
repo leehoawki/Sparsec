@@ -3,16 +3,26 @@ class Parsec(object):
         self.parsec = parserc
         super(Parsec, self).__init__(*args, **kwargs)
 
-    def __call__(self, *args, **kwargs):
-        return self.parsec(*args, **kwargs)
+    def __call__(self, state):
+        if not isinstance(state,State):
+            raise SparseError("Only State target is acceptable.")
+        return self.parsec(state)
 
     def then(self, c):
-        def parse(state):
+        @Parsec
+        def func(state):
             self.parsec(state)
             return c(state)
 
+        return func
+
     def bind(self, c):
-        pass
+        @Parsec
+        def func(state):
+            binder = c(self.parsec(state))
+            return binder(state)
+
+        return func
 
 
 class SparseError(Exception):
@@ -163,3 +173,14 @@ def Choice(*parsecs):
 def EOF(state):
     if state.has_next():
         raise ExpectingError("EOF", state.get_rest())
+
+
+def Between(start, end, parser):
+    @Parsec
+    def parse(state):
+        start(state)
+        re = parser(state)
+        end(state)
+        return re
+
+    return parse
