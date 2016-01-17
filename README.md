@@ -4,8 +4,8 @@ Parser Combinator in Python. Some examples can be found here.
 ### [Simple Calculator](SimpleCalc.py)
 Parse arithmetic expression and calculate them.
 
-    print calculate("3*2*4/(2+2)+2*2/4+2")
-    print calculate("2+(3+4)*5")
+    calculate("3*2*4/(2+2)+2*2/4+2")
+    calculate("2+(3+4)*5")
 
 ### [Json Parser](JsonParser.py)
 Parse Json format input string into python dict,list,etc.
