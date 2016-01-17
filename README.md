@@ -1,5 +1,5 @@
 # Sparsec
-Parser Combinator in Python. Some examples can be found here.
+Parser Combinator in Python. Some demos can be found here.
 
 ### [Simple Calculator](SimpleCalc.py)
 Parse arithmetic expression and calculate them.
