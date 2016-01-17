@@ -124,10 +124,10 @@ def Many(parsec):
     @Parsec
     def parse(state):
         c = Try(parsec)
-        items = ""
+        items = []
         item = c(state)
         while item:
-            items += item
+            items.append(item)
             item = c(state)
         return items
 

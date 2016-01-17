@@ -11,18 +11,20 @@ def Expr(state):
     """
     expr ::= term { (+|-) term }*
     """
-    term1 = Term(state)
-    while True:
-        op = Try(OneOf("+-"))(state)
-        if not op:
-            return term1
-        else:
-            term2 = Term(state)
+    re = Term(state)
 
+    @Parsec
+    def terms(state):
+        op = OneOf("+-")(state)
+        t = Term(state)
+        return (op, t)
+
+    for op, t in Many(terms)(state):
         if op == "+":
-            term1 += term2
+            re += t
         elif op == "-":
-            term1 -= term2
+            re -= t
+    return re
 
 
 @Parsec
@@ -30,18 +32,20 @@ def Term(state):
     """
    term ::= factor { (*|/) factor }*
     """
-    factor1 = Factor(state)
-    while True:
-        op = Try(OneOf("*/"))(state)
-        if not op:
-            return factor1
-        else:
-            factor2 = Factor(state)
+    re = Factor(state)
 
+    @Parsec
+    def factors(state):
+        op = OneOf("*/")(state)
+        f = Factor(state)
+        return (op, f)
+
+    for op, f in Many(factors)(state):
         if op == "*":
-            factor1 *= factor2
+            re *= f
         elif op == "/":
-            factor1 /= factor2
+            re /= f
+    return re
 
 
 @Parsec
@@ -55,7 +59,7 @@ def Factor(state):
 
 @Parsec
 def Num(state):
-    n = Many(Digit)(state)
+    n = "".join(Many(Digit)(state))
     return int(n)
 
 

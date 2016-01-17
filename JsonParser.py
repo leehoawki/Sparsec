@@ -55,7 +55,7 @@ def Array(state):
 
 @Parsec
 def String(state):
-    return Between(Eq('"'),Eq('"'),Many(Ne('"')))(state)
+    return "".join(Between(Eq('"'),Eq('"'),Many(Ne('"')))(state))
 
 
 @Parsec
@@ -78,7 +78,7 @@ def False(state):
 
 @Parsec
 def Number(state):
-    n = Many(OneOf("1234567890-+."))(state)
+    n = "".join(Many(OneOf("1234567890-+."))(state))
     return float(n)
 
 
