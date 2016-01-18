@@ -4,7 +4,7 @@ class Parsec(object):
         super(Parsec, self).__init__(*args, **kwargs)
 
     def __call__(self, state):
-        if not isinstance(state,State):
+        if not isinstance(state, State):
             raise SparseError("Only State target is acceptable.")
         return self.parsec(state)
 
@@ -182,5 +182,19 @@ def Between(start, end, parser):
         re = parser(state)
         end(state)
         return re
+
+    return parse
+
+
+def SepBy(sep, parser):
+    @Parsec
+    def parse(state):
+        c = Try(Eq(sep).then(parser))
+        items = []
+        item = Try(parser)(state)
+        while item:
+            items.append(item)
+            item = c(state)
+        return items
 
     return parse

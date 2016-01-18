@@ -18,8 +18,9 @@ def Trim(state):
 @Parsec
 def Object(state):
     Eq("{")(state)
-    a = {}
-    while True:
+
+    @Parsec
+    def parse(state):
         Trim(state)
         key = String(state)
         Trim(state)
@@ -27,35 +28,32 @@ def Object(state):
         Trim(state)
         val = Value(state)
         Trim(state)
-        a[key] = val
-        s = Choice(Eq(","), Eq("}"))(state)
-        if s == "}":
-            break
-        elif s == ",":
-            continue
-    return a
+        return key, val
+
+    re = dict(SepBy(",", parse)(state))
+    Eq("}")(state)
+    return re
 
 
 @Parsec
 def Array(state):
     Eq("[")(state)
-    a = []
-    while True:
+
+    @Parsec
+    def parse(state):
         Trim(state)
         re = Value(state)
-        a.append(re)
         Trim(state)
-        s = Choice(Eq(","), Eq("]"))(state)
-        if s == "]":
-            break
-        elif s == ",":
-            continue
-    return a
+        return re
+
+    re = SepBy(",", parse)(state)
+    Eq("]")(state)
+    return re
 
 
 @Parsec
 def String(state):
-    return "".join(Between(Eq('"'),Eq('"'),Many(Ne('"')))(state))
+    return "".join(Between(Eq('"'), Eq('"'), Many(Ne('"')))(state))
 
 
 @Parsec
