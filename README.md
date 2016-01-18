@@ -8,7 +8,7 @@ Parse arithmetic expression and calculate them.
     calculate("2+(3+4)*5")
 
 ### [Json Parser](JsonParser.py)
-Parse Json format input string into python dict,list,etc.
+Parse Json format input string into python dict, list, etc.
 
     load("""{
             "programmers": [{
