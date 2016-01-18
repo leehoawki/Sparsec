@@ -67,17 +67,15 @@ def Number(state):
     n = "".join(Many(OneOf("1234567890-+."))(state))
     try:
         return float(n)
-    except Exception:
+    except ValueError:
         raise SparseError("Can not convert %s to Number " % n)
 
 
 @Parsec
 def Bool(state):
-    re = Choice(Eq("true"), Eq("false"))(state)
-    return {"true": True, "false": False}.get(re)
+    return {"true": True, "false": False}.get(Choice(Eq("true"), Eq("false"))(state))
 
 
 @Parsec
 def Value(state):
-    re = Choice(Null, Bool, String, Object, Array, Number)(state)
-    return re
+    return Choice(Null, Bool, String, Object, Array, Number)(state)
