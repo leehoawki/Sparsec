@@ -42,7 +42,7 @@ class State(object):
     def __init__(self, data):
         self.data = data
         self.index = 0
-        self.tran = None
+        self.tran = []
 
     def next(self):
         if 0 <= self.index < len(self.data):
@@ -53,15 +53,14 @@ class State(object):
             raise SparseError("nothing to sparse, EOF.")
 
     def backup(self):
-        self.tran = self.index
+        self.tran.append(self.index)
         return self.index
 
     def commit(self, tran):
         self.tran = None
 
     def restore(self):
-        self.index = self.tran
-        self.tran = None
+        self.index = self.tran.pop()
 
     def has_next(self):
         if self.index < len(self.data):

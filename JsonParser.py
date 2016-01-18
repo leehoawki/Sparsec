@@ -63,18 +63,6 @@ def Null(state):
 
 
 @Parsec
-def T(state):
-    Eq("true")(state)
-    return True
-
-
-@Parsec
-def F(state):
-    Eq("false")(state)
-    return False
-
-
-@Parsec
 def Number(state):
     n = "".join(Many(OneOf("1234567890-+."))(state))
     try:
@@ -84,6 +72,12 @@ def Number(state):
 
 
 @Parsec
+def Bool(state):
+    re = Choice(Eq("true"), Eq("false"))(state)
+    return {"true": True, "false": False}.get(re)
+
+
+@Parsec
 def Value(state):
-    re = Choice(Null, T, F, String, Object, Array, Number)(state)
+    re = Choice(Null, Bool, String, Object, Array, Number)(state)
     return re
