@@ -24,6 +24,9 @@ class Parsec(object):
 
         return func
 
+    def __repr__(self):
+        return self.parsec.__repr__()
+
 
 class SparseError(Exception):
     def __init__(self, message):
@@ -152,7 +155,7 @@ def Eq(items):
             re = state.next()
             if re != item:
                 raise ExpectingError(item, re)
-            return re
+        return items
 
     return parse
 
@@ -162,7 +165,7 @@ def Choice(*parsecs):
     def parse(state):
         for c in parsecs:
             re = Try(c)(state)
-            if re:
+            if re is not None:
                 return re
         raise SparseError("No choice can match.")
 
@@ -192,7 +195,7 @@ def SepBy(sep, parser):
         c = Try(Eq(sep).then(parser))
         items = []
         item = Try(parser)(state)
-        while item:
+        while item is not None:
             items.append(item)
             item = c(state)
         return items

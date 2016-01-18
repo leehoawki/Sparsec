@@ -63,13 +63,13 @@ def Null(state):
 
 
 @Parsec
-def True(state):
+def T(state):
     Eq("true")(state)
     return True
 
 
 @Parsec
-def False(state):
+def F(state):
     Eq("false")(state)
     return False
 
@@ -77,50 +77,13 @@ def False(state):
 @Parsec
 def Number(state):
     n = "".join(Many(OneOf("1234567890-+."))(state))
-    return float(n)
+    try:
+        return float(n)
+    except Exception:
+        raise SparseError("Can not convert %s to Number " % n)
 
 
 @Parsec
 def Value(state):
-    re = Choice(Null, True, False, String, Object, Array, Number)(state)
+    re = Choice(Null, T, F, String, Object, Array, Number)(state)
     return re
-
-
-if __name__ == "__main__":
-    print load("""{
-        "programmers": [{
-            "firstName": "Brett",
-            "lastName": "McLaughlin",
-            "email": "aaaa"
-        }, {
-            "firstName": "Jason",
-            "lastName": "Hunter",
-            "email": "bbbb"
-        }, {
-            "firstName": "Elliotte",
-            "lastName": "Harold",
-            "email": "cccc"
-        }],
-        "authors": [{
-            "firstName": "Isaac",
-            "lastName": "Asimov",
-            "genre": "sciencefiction"
-        }, {
-            "firstName": "Tad",
-            "lastName": "Williams",
-            "genre": "fantasy"
-        }, {
-            "firstName": "Frank",
-            "lastName": "Peretti",
-            "genre": "christianfiction"
-        }],
-        "musicians": [{
-            "firstName": "Eric",
-            "lastName": "Clapton",
-            "instrument": "guitar"
-        }, {
-            "firstName": "Sergei",
-            "lastName": "Rachmaninoff",
-            "instrument": "piano"
-        }]
-    }""")
