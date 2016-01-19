@@ -33,12 +33,12 @@ def ParseString(state):
 
 @Parsec
 def ParseAtom(state):
-    return Atom(Many(Alphabet)(state))
+    return Atom(Many1(Alphabet)(state))
 
 
 @Parsec
 def ParseNumber(state):
-    return Number(float("".join(Many(Digit)(state))))
+    return Number(float("".join(Many1(Digit)(state))))
 
 
 @Parsec
@@ -53,7 +53,7 @@ def ParseList(state):
 
 @Parsec
 def ParseExpr(state):
-    return Choice(ParseBool, ParseString, ParseAtom, ParseList, ParseNumber)(state)
+    return Choice(ParseBool, ParseString, ParseAtom, ParseNumber)(state)
 
 
 def ReadExpr(expression):
@@ -62,4 +62,4 @@ def ReadExpr(expression):
     return re
 
 
-print ReadExpr("#t 1 2 3")
+print ReadExpr("1")

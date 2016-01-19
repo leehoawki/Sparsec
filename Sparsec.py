@@ -149,7 +149,15 @@ def Many(parsec):
 def Many1(parsec):
     @Parsec
     def parse(state):
-        pass
+        c = Try(parsec)
+        items = [parsec(state)]
+        item = c(state)
+        while item:
+            items.append(item)
+            item = c(state)
+        return items
+
+    return parse
 
 
 def Ne(item):
