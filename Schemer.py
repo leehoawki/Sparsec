@@ -4,8 +4,9 @@ from Sparsec import *
 ###########Types and Builtin###############
 
 class Env(dict):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, para={}):
         self.parent = parent
+        self.update(para)
 
     def get(self, k, d=None):
         if k in self:
@@ -14,9 +15,6 @@ class Env(dict):
             return self.parent.get(k, d)
         else:
             return None
-
-
-env = Env()
 
 
 class Ast(object):
@@ -65,6 +63,9 @@ class Visitor(object):
 
 
 class EvalVisitor(Visitor):
+    def __init__(self, env):
+        self.env = env
+
     def visitString(self, visited):
         return visited.val
 
@@ -72,7 +73,7 @@ class EvalVisitor(Visitor):
         return visited.val
 
     def visitAtom(self, visited):
-        return env.get(visited.val)
+        return self.env.get(visited.val)
 
     def visitList(self, visited):
         func = visited.val[0].accept(self)
@@ -138,6 +139,7 @@ def div(a, *args):
     return a / reduce(lambda x, y: x * y, args, 1)
 
 
+env = Env()
 env["+"] = add
 env["-"] = sub
 env["*"] = mul
@@ -146,4 +148,4 @@ env["/"] = div
 ##################Lab######################
 
 
-print EvalVisitor().visit(ReadExpr("(- (+ 4 6 3) 3 5 2)"))
+print EvalVisitor(env).visit(ReadExpr("(- (+ 4 6 3) 3 5 2)"))
