@@ -1,41 +1,65 @@
 from Sparsec import *
 
 
-class LispVal(object):
+class Ast(object):
     def __init__(self, val):
         self.val = val
 
 
+class Bool(Ast):
+    pass
+
+
+class Number(Ast):
+    pass
+
+
+class String(Ast):
+    pass
+
+
+class List(Ast):
+    pass
+
+
+class Atom(Ast):
+    pass
+
+
 @Parsec
 def ParseString(state):
-    pass
+    return String("".join(Between(Eq('"'), Eq('"'), Many(Ne('"')))(state)))
 
 
 @Parsec
 def ParseAtom(state):
-    pass
+    return Atom(Many(Alphabet)(state))
 
 
 @Parsec
 def ParseNumber(state):
-    pass
+    return Number(float("".join(Many(Digit)(state))))
 
 
 @Parsec
 def ParseBool(state):
-    pass
+    return Bool(Choice(Eq("#f"), Eq("#t"))(state))
 
 
 @Parsec
 def ParseList(state):
-    pass
+    return List(SepBy(" ", ParseExpr)(state))
 
 
 @Parsec
 def ParseExpr(state):
-    return Choice(ParseBool, ParseAtom, ParseString, ParseNumber)
+    return Choice(ParseBool, ParseString, ParseAtom, ParseList, ParseNumber)(state)
 
 
 def ReadExpr(expression):
     state = State(expression)
     re = ParseExpr(state)
+    return re
+
+
+print ReadExpr("#t 1 2 3")
