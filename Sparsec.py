@@ -110,6 +110,14 @@ def Digit(state):
     return re
 
 
+@Parsec
+def Alphabet(state):
+    re = state.next()
+    if not re.isalpha():
+        raise ExpectingError("Alphabet", re)
+    return re
+
+
 def Try(parsec):
     @Parsec
     def parse(state):
@@ -136,6 +144,12 @@ def Many(parsec):
         return items
 
     return parse
+
+
+def Many1(parsec):
+    @Parsec
+    def parse(state):
+        pass
 
 
 def Ne(item):
