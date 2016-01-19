@@ -79,3 +79,49 @@ def Bool(state):
 @Parsec
 def Value(state):
     return Choice(Null, Bool, String, Object, Array, Number)(state)
+
+
+if __name__ == '__main__':
+    long_text = """{
+            "programmers": [{
+                "firstName": "Brett",
+                "lastName": "McLaughlin",
+                "email": "aaaa",
+                "age":12,
+                "isshit":true
+            }, {
+                "firstName": "Jason",
+                "lastName": "Hunter",
+                "email": "bbbb",
+                "isshit":false
+            }, {
+                "firstName": "Elliotte",
+                "lastName": "Harold",
+                "email": "cccc"
+            }],
+            "authors": [{
+                "firstName": "Isaac",
+                "lastName": "Asimov",
+                "genre": "sciencefiction"
+            }, {
+                "firstName": "Tad",
+                "lastName": "Williams",
+                "genre": "fantasy"
+            }, {
+                "firstName": "Frank",
+                "lastName": "Peretti",
+                "genre": "christianfiction"
+            }],
+            "musicians": [{
+                "firstName": "Eric",
+                "lastName": "Clapton",
+                "instrument": "guitar"
+            }, {
+                "firstName": "Sergei",
+                "lastName": "Rachmaninoff",
+                "instrument": "piano"
+            }]
+        }
+        """
+
+    print load(long_text)

@@ -56,8 +56,8 @@ class State(object):
         self.tran.append(self.index)
         return self.index
 
-    def commit(self, tran):
-        self.tran = None
+    def commit(self):
+        self.tran.pop()
 
     def restore(self):
         self.index = self.tran.pop()
@@ -115,7 +115,9 @@ def Try(parsec):
     def parse(state):
         try:
             state.backup()
-            return parsec(state)
+            re = parsec(state)
+            state.commit()
+            return re
         except SparseError:
             state.restore()
 
