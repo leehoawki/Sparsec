@@ -8,12 +8,12 @@ class Env(dict):
         self.parent = parent
 
     def get(self, k, d=None):
-        re = super(Env, self).get(k, d)
-        if re is not None:
-            return re
-        if self.parent is not None:
+        if k in self:
+            return self[k]
+        elif self.parent:
             return self.parent.get(k, d)
-        return None
+        else:
+            return None
 
 
 env = Env()
@@ -92,7 +92,7 @@ def ParseString(state):
 
 @Parsec
 def ParseAtom(state):
-    return Atom("".join(Many1(Alphabet)(state)))
+    return Atom("".join(Many1(Choice(Alphabet, OneOf("!#$%&|*+-/:<=>?@^_~")))(state)))
 
 
 @Parsec
@@ -126,9 +126,24 @@ def add(a, *args):
     return a + sum(args)
 
 
-env["add"] = add
+def sub(a, *args):
+    return a - sum(args)
+
+
+def mul(a, *args):
+    return a * reduce(lambda x, y: x * y, args, 1)
+
+
+def div(a, *args):
+    return a / reduce(lambda x, y: x * y, args, 1)
+
+
+env["+"] = add
+env["-"] = sub
+env["*"] = mul
+env["/"] = div
 
 ##################Lab######################
 
 
-print EvalVisitor().visit(ReadExpr('(add 1 2)'))
+print EvalVisitor().visit(ReadExpr("(- (+ 4 6 3) 3 5 2)"))
