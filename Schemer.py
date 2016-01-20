@@ -22,7 +22,7 @@ class Ast(object):
         self.val = val
 
     def accept(self, visitor):
-        pass
+        return visitor.visit(self)
 
 
 class Bool(Ast):
@@ -31,28 +31,21 @@ class Bool(Ast):
     def __init__(self, val):
         self.val = self.__class__.a.get(val)
 
-    def accept(self, visitor):
-        return visitor.visit(self)
-
 
 class Number(Ast):
-    def accept(self, visitor):
-        return visitor.visit(self)
+    pass
 
 
 class String(Ast):
-    def accept(self, visitor):
-        return visitor.visit(self)
+    pass
 
 
 class List(Ast):
-    def accept(self, visitor):
-        return visitor.visit(self)
+    pass
 
 
 class Atom(Ast):
-    def accept(self, visitor):
-        return visitor.visit(self)
+    pass
 
 
 #############Eval and Apply################
@@ -76,7 +69,8 @@ class EvalVisitor(Visitor):
         return self.env.get(visited.val)
 
     def visitList(self, visited):
-        func = visited.val[0].accept(self)
+        first = visited.val[0]
+        func = first.accept(self)
         args = map(lambda x: x.accept(self), visited.val[1:])
         return func(*args)
 
@@ -108,12 +102,18 @@ def ParseBool(state):
 
 @Parsec
 def ParseList(state):
-    return List(Between(Eq("("), Eq(")"), SepBy(" ", ParseExpr))(state))
+    re = List(Between(Eq("(").then(Many(Space)), Many(Space).then(Eq(")")), SepBy(Spaces, ParseExpr))(state))
+    return re
 
 
 @Parsec
 def ParseExpr(state):
     return Choice(ParseBool, ParseString, ParseNumber, ParseAtom, ParseList)(state)
+
+
+@Parsec
+def Spaces(state):
+    return Many1(Space)(state)
 
 
 def ReadExpr(expression):
@@ -148,4 +148,7 @@ env["/"] = div
 ##################Lab######################
 
 
-print EvalVisitor(env).visit(ReadExpr("(- (+ 4 6 3) 3 5 2)"))
+e = EvalVisitor(env)
+print e.visit(ReadExpr("(  -  (  + 4  6 3  ) 3 5 2  )"))
+# print e.visit(ReadExpr("(define a 1)"))
+# print e.visit(ReadExpr("a"))

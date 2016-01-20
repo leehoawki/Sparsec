@@ -30,7 +30,7 @@ def Object(state):
         Trim(state)
         return key, val
 
-    re = dict(SepBy(",", parse)(state))
+    re = dict(SepBy(One(","), parse)(state))
     Eq("}")(state)
     return re
 
@@ -46,7 +46,7 @@ def Array(state):
         Trim(state)
         return re
 
-    re = SepBy(",", parse)(state)
+    re = SepBy(One(","), parse)(state)
     Eq("]")(state)
     return re
 

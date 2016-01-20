@@ -215,7 +215,7 @@ def Between(start, end, parser):
 def SepBy(sep, parser):
     @Parsec
     def parse(state):
-        c = Try(Eq(sep).then(parser))
+        c = Try(sep.then(parser))
         items = []
         item = Try(parser)(state)
         while item is not None:
