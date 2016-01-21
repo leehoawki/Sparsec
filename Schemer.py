@@ -70,6 +70,10 @@ class EvalVisitor(Visitor):
 
     def visitList(self, visited):
         first = visited.val[0]
+        if first.val == "if":
+            con, e1, e2 = visited.val[1:]
+            exp = e1 if con.accept(self) else e2
+            return exp.accept(self)S
         func = first.accept(self)
         args = map(lambda x: x.accept(self), visited.val[1:])
         return func(*args)
@@ -150,5 +154,8 @@ env["/"] = div
 
 e = EvalVisitor(env)
 print e.visit(ReadExpr("(  -  (  + 4  6 3  ) 3 5 2  )"))
+print e.visit(ReadExpr("(  -  (  + (  * 2  3 1  )  6 3  ) 3 5 2  )"))
+print e.visit(ReadExpr("(if #t 1 2)"))
+print e.visit(ReadExpr("(if #f 1 2)"))
 # print e.visit(ReadExpr("(define a 1)"))
 # print e.visit(ReadExpr("a"))
