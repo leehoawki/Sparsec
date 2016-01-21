@@ -73,7 +73,7 @@ class EvalVisitor(Visitor):
         if first.val == "if":
             con, e1, e2 = visited.val[1:]
             exp = e1 if con.accept(self) else e2
-            return exp.accept(self)S
+            return exp.accept(self)
         func = first.accept(self)
         args = map(lambda x: x.accept(self), visited.val[1:])
         return func(*args)
