@@ -82,6 +82,8 @@ class EvalVisitor(Visitor):
             p, body = visited.val[1:]
             plist = map(lambda x: x.val, p.val)
             return lambda *args: EvalVisitor(Env(parent=self.env, para=zip(plist, args))).visit(body)
+        elif first.val == "quote":
+            return map(lambda x: x.accept(self), visited.val[1:])
         else:
             func = first.accept(self)
             args = map(lambda x: x.accept(self), visited.val[1:])
@@ -120,8 +122,16 @@ def ParseList(state):
 
 
 @Parsec
+def ParseQuoteList(state):
+    re = List([Atom("quote")] +
+              Between(Eq("'").then(Eq("(")).then(Many(Space)), Many(Space).then(Eq(")")), SepBy(Spaces, ParseExpr))(
+                      state))
+    return re
+
+
+@Parsec
 def ParseExpr(state):
-    return Choice(ParseBool, ParseString, ParseNumber, ParseAtom, ParseList)(state)
+    return Choice(ParseBool, ParseString, ParseNumber, ParseAtom, ParseList, ParseQuoteList)(state)
 
 
 @Parsec
@@ -152,12 +162,26 @@ def div(a, *args):
     return a / reduce(lambda x, y: x * y, args, 1)
 
 
+def car(l):
+    return l[0]
+
+
+def cdr(l):
+    return l[1:]
+
+
+def cons(head, rest):
+    return [head] + rest
+
+
 env = Env()
 env["+"] = add
 env["-"] = sub
 env["*"] = mul
 env["/"] = div
-
+env["car"] = car
+env["cdr"] = cdr
+env["cons"] = cons
 ##################Lab######################
 
 
@@ -168,4 +192,9 @@ print e.visit(ReadExpr("(if #f 1 2)"))
 print e.visit(ReadExpr("(if #t (define a 1) (define a 2))"))
 print e.visit(ReadExpr("a"))
 print e.visit(ReadExpr("(define f (lambda (b c ) (+ b c) ))"))
-print e.visit(ReadExpr("(f 3 4)"))
+print e.visit(ReadExpr("(f a 4)"))
+print e.visit(ReadExpr("(define b '(1 2))"))
+print e.visit(ReadExpr("(car b)"))
+print e.visit(ReadExpr("(cdr b)"))
+print e.visit(ReadExpr("(define c (cons 1 '(2 3)))"))
+print e.visit(ReadExpr("c"))
