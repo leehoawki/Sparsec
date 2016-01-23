@@ -74,9 +74,18 @@ class EvalVisitor(Visitor):
             con, e1, e2 = visited.val[1:]
             exp = e1 if con.accept(self) else e2
             return exp.accept(self)
-        func = first.accept(self)
-        args = map(lambda x: x.accept(self), visited.val[1:])
-        return func(*args)
+        elif first.val == "define":
+            var, exp = visited.val[1:]
+            self.env[var.val] = exp.accept(self)
+            return None
+        elif first.val == "lambda":
+            p, body = visited.val[1:]
+            plist = map(lambda x: x.val, p.val)
+            return lambda *args: EvalVisitor(Env(parent=self.env, para=zip(plist, args))).visit(body)
+        else:
+            func = first.accept(self)
+            args = map(lambda x: x.accept(self), visited.val[1:])
+            return func(*args)
 
     def visitBool(self, visited):
         return visited.val
@@ -155,7 +164,8 @@ env["/"] = div
 e = EvalVisitor(env)
 print e.visit(ReadExpr("(  -  (  + 4  6 3  ) 3 5 2  )"))
 print e.visit(ReadExpr("(  -  (  + (  * 2  3 1  )  6 3  ) 3 5 2  )"))
-print e.visit(ReadExpr("(if #t 1 2)"))
 print e.visit(ReadExpr("(if #f 1 2)"))
-# print e.visit(ReadExpr("(define a 1)"))
-# print e.visit(ReadExpr("a"))
+print e.visit(ReadExpr("(if #t (define a 1) (define a 2))"))
+print e.visit(ReadExpr("a"))
+print e.visit(ReadExpr("(define f (lambda (b c ) (+ b c) ))"))
+print e.visit(ReadExpr("(f 3 4)"))
