@@ -184,17 +184,17 @@ env["cdr"] = cdr
 env["cons"] = cons
 ##################Lab######################
 
-
-e = EvalVisitor(env)
-print e.visit(ReadExpr("(  -  (  + 4  6 3  ) 3 5 2  )"))
-print e.visit(ReadExpr("(  -  (  + (  * 2  3 1  )  6 3  ) 3 5 2  )"))
-print e.visit(ReadExpr("(if #f 1 2)"))
-print e.visit(ReadExpr("(if #t (define a 1) (define a 2))"))
-print e.visit(ReadExpr("a"))
-print e.visit(ReadExpr("(define f (lambda (b c ) (+ b c) ))"))
-print e.visit(ReadExpr("(f a 4)"))
-print e.visit(ReadExpr("(define b '(1 2))"))
-print e.visit(ReadExpr("(car b)"))
-print e.visit(ReadExpr("(cdr b)"))
-print e.visit(ReadExpr("(define c (cons 1 '(2 3)))"))
-print e.visit(ReadExpr("c"))
+if __name__ == '__main__':
+    e = EvalVisitor(env)
+    print e.visit(ReadExpr("(  -  (  + 4  6 3  ) 3 5 2  )"))
+    print e.visit(ReadExpr("(  -  (  + (  * 2  3 1  )  6 3  ) 3 5 2  )"))
+    print e.visit(ReadExpr("(if #f 1 2)"))
+    print e.visit(ReadExpr("(if #t (define a 1) (define a 2))"))
+    print e.visit(ReadExpr("a"))
+    print e.visit(ReadExpr("(define f (lambda (b c ) (+ b c) ))"))
+    print e.visit(ReadExpr("(f a 4)"))
+    print e.visit(ReadExpr("(define b '(1 2))"))
+    print e.visit(ReadExpr("(car b)"))
+    print e.visit(ReadExpr("(cdr b)"))
+    print e.visit(ReadExpr("(define c (cons 1 '(2 3)))"))
+    print e.visit(ReadExpr("c"))
