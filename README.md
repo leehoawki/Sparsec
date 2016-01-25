@@ -29,7 +29,8 @@ Parse Json format input string into python dict, list, etc.
 
 ### [Schemer](Schemer.py)
 Parse Scheme code into AST and evaluate them using visitor pattern.
-
-    eval("(- (+ 4 6 3) 3 5 2)")
-    eval("(define (f x y) (+ x y))")
-    eval("(f 1 2)")
+    
+    v = EvalVisitor(env)
+    v.visit(ReadExpr("(- (+ 4 6 3) 3 5 2)"))
+    v.visit(ReadExpr(("(define (f x y) (+ x y))"))
+    v.visit(ReadExpr(("(f 1 2)"))
