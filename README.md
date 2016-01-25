@@ -32,5 +32,5 @@ Parse Scheme code into AST and evaluate them using visitor pattern.
     
     v = EvalVisitor(env)
     v.visit(ReadExpr("(- (+ 4 6 3) 3 5 2)"))
-    v.visit(ReadExpr(("(define (f x y) (+ x y))"))
+    v.visit(ReadExpr("(define f (lambda (x y) (+ x y)))"))
     v.visit(ReadExpr(("(f 1 2)"))
