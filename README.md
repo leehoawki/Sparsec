@@ -1,13 +1,13 @@
 # Sparsec
 Parser Combinator in Python. Some demos can be found here.
 
-### [Simple Calculator](SimpleCalc.py)
+### [Simple Calculator](Demos/SimpleCalc.py)
 Parse arithmetic expression and calculate them.
 
     calculate("3*2*4/(2+2)+2*2/4+2")
     calculate("2+(3+4)*5")
 
-### [Json Parser](JsonParser.py)
+### [Json Parser](Demos/JsonParser.py)
 Parse Json format input string into python dict, list, etc.
 
     load("""{
@@ -27,7 +27,7 @@ Parse Json format input string into python dict, list, etc.
             }]
         }""")
 
-### [Schemer](Schemer.py)
+### [Schemer](Demos/Schemer.py)
 Parse Scheme code into AST and evaluate them using visitor pattern.
     
     v = EvalVisitor(env)
