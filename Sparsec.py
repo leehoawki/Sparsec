@@ -50,7 +50,7 @@ class State(object):
             self.index += 1
             return re
         else:
-            raise SparseError("nothing to sparse, EOF.")
+            raise SparseError("Nothing to sparse, EOF.")
 
     def backup(self):
         self.tran.append(self.index)
@@ -165,7 +165,7 @@ def Ne(item):
     def parse(state):
         re = state.next()
         if re == item:
-            raise ExpectingError("Not %s" % item, re)
+            raise ExpectingError("NOT %s" % item, re)
         return re
 
     return parse
@@ -190,7 +190,7 @@ def Choice(*parsecs):
             re = Try(c)(state)
             if re is not None:
                 return re
-        raise SparseError("No choice can match.")
+        raise SparseError("No choice can match %s." % state.get_rest())
 
     return parse
 
