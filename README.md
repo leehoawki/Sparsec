@@ -1,5 +1,15 @@
 # Sparsec
-Parser Combinator in Python. Some demos can be found here.
+Parser Combinator in Python. 
+Define parser function or parser combinator using existed combinators. 
+
+    @Parsec                      # Using decorator to define a new combinator
+    def test(state):             # Function receives a state object as input
+        One("(")(state)          # Match quote
+        val = Many1(Digit)(state)# Match numbers
+        One(")")(state)          # Match quote
+        return int("".join(val)) # Return matched value
+
+Some demos can be found here.
 
 ### [Simple Calculator](Demos/SimpleCalc.py)
 Parse arithmetic expression and calculate them.
