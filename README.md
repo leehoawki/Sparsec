@@ -2,8 +2,8 @@
 Parser Combinator in Python. 
 Define parser function or parser combinator using existed combinators. 
 
-    @Parsec                      # Using decorator to define a new combinator
-    def test(state):             # Function receives a state object as input
+    @Parsec                      # Use decorator to define a new combinator
+    def test(state):             # Parsing function receives a state object as input
         One("(")(state)          # Match parenthesis
         val = Many1(Digit)(state)# Match numbers
         One(")")(state)          # Match parenthesis
