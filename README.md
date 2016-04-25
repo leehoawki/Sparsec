@@ -4,10 +4,12 @@ Define parser function or parser combinator using existed combinators.
 
     @Parsec                      # Using decorator to define a new combinator
     def test(state):             # Function receives a state object as input
-        One("(")(state)          # Match quote
+        One("(")(state)          # Match parenthesis
         val = Many1(Digit)(state)# Match numbers
-        One(")")(state)          # Match quote
+        One(")")(state)          # Match parenthesis
         return int("".join(val)) # Return matched value
+        
+    assert test(State("(42)")) == 42
 
 Some demos can be found here.
 
